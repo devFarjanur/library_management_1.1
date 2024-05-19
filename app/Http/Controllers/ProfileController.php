@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BorrowApproval;
 use App\Models\BorrowRequest;
+use App\Models\Feed;
+use App\Models\Feedback;
 use App\Models\ReturnBook;
 use Illuminate\Http\Request;
 
@@ -243,9 +245,31 @@ class ProfileController extends Controller
             \Log::error('Error returning book: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Failed to return the book.']);
         }
+    }    
+
+
+    public function create()
+    {
+        return view('layouts.book.feedback');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        Feed::create([
+            'user_id' => auth()->user()->id,
+            'content' => $request->input('content'),
+        ]);
+
+        return redirect()->back()->with([
+            'message' => 'Feedback submitted successfully.',
+            'alert-type' => 'success',
+        ]);
     }
     
-
 
     
 }

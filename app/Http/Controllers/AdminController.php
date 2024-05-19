@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BorrowApproval;
 use App\Models\BorrowRequest;
+use App\Models\Feed;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -238,14 +239,25 @@ class AdminController extends Controller
     {
         $book = Book::findOrFail($id);
         $book->update($request->all());
-        return redirect()->route('admin.book')->with('success', 'Book updated successfully.');
+
+
+        return redirect()->route('admin.book')->with([
+            'message' => 'Book updated successfully.',
+            'alert-type' => 'success'
+        ]);
+
     }
 
     public function deleteBook($id)
     {
         $book = Book::findOrFail($id);
         $book->delete();
-        return redirect()->route('admin.book')->with('success', 'Book deleted successfully.');
+
+        return redirect()->route('admin.book')->with([
+            'message' => 'Book deleted successfully.',
+            'alert-type' => 'success'
+        ]);
+
     }
 
 
@@ -398,6 +410,11 @@ class AdminController extends Controller
     }
     
 
+    public function index()
+    {
+        $feedbacks = Feed::with('user')->latest()->get();
+        return view('admin.admin_feed', compact('feedbacks'));
+    }
 
 
 

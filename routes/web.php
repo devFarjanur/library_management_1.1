@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/student/return-book-list', [ProfileController::class, 'StudentReturnBookList'])->name('student.return.book.list');
     Route::post('/student/return-book/{borrowApproval}', [ProfileController::class, 'ReturnBook'])->name('student.return.book');
 
+    Route::get('/student/feedback/create', [ProfileController::class, 'create'])->name('feedback.create');
+    Route::post('/student/feedback/store', [ProfileController::class, 'store'])->name('feedback.store');
+
 
 
 });
@@ -101,6 +104,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
     Route::get('/admin/report', [AdminController::class, 'AdminReport'])->name('admin.report');
+
+    Route::get('/admin/feedback', [AdminController::class, 'index'])->name('feedback.index');
 
 
 
