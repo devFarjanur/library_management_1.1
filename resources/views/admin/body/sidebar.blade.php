@@ -14,7 +14,7 @@
       <div class="sidebar-body">
         <ul class="nav">
           <li class="nav-item nav-category">Main</li>
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a href="{{ route('admin.dashboard') }}" class="nav-link">
               <i class="link-icon" data-feather="box"></i>
               
@@ -22,46 +22,46 @@
             </a>
           </li>
         
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a href="{{ route('admin.request.student') }}" class="nav-link">
-              <i class="link-icon" data-feather="book"></i>
-              <span class="link-title">Membership Request</span>
+              <i class="link-icon" data-feather="user-plus"></i>
+              <span class="link-title">Membership</span>
             </a>
           </li>
 
 
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a href="{{ route('admin.book') }}" class="nav-link">
               <i class="link-icon" data-feather="book"></i>
               <span class="link-title">Books</span>
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a class="nav-link" href="{{ route('admin.borrow.request') }}">
               <i class="link-icon" data-feather="alert-circle"></i>
               <span class="link-title">Book Request</span>
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a class="nav-link" href="{{ route('admin.returned.book') }}">
-              <i class="link-icon" data-feather="alert-circle"></i>
+              <i class="link-icon" data-feather="book-open"></i>
               <span class="link-title">Return Book</span>
             </a>
           </li>
 
           
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a class="nav-link" href="{{ route('feedback.index') }}">
-              <i class="link-icon" data-feather="alert-circle"></i>
+              <i class="link-icon" data-feather="user"></i>
               <span class="link-title">Student Feedback</span>
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item pt-2">
             <a class="nav-link" href="{{ route('admin.report') }}">
-              <i class="link-icon" data-feather="alert-circle"></i>
+              <i class="link-icon" data-feather="bookmark"></i>
               <span class="link-title">Admin Report</span>
             </a>
           </li>

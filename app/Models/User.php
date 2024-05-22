@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Validator;
 
 class User extends Authenticatable
 {
@@ -38,25 +38,45 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Boot the model and add a saving event to validate the phone attribute.
+     */
+    public static function boot()
+    {
+        parent::boot();
 
+        static::saving(function ($model) {
+            $validator = Validator::make($model->toArray(), [
+                'phone' => 'nullable|numeric|digits:11',
+            ]);
 
+            if ($validator->fails()) {
+                throw new \Illuminate\Validation\ValidationException($validator);
+            }
+        });
+    }
+
+    /**
+     * Get the return books associated with the user.
+     */
     public function returnBooks()
     {
         return $this->hasMany(ReturnBook::class);
     }
 
+    /**
+     * Get the borrow requests associated with the user.
+     */
     public function borrowRequests()
     {
         return $this->hasMany(BorrowRequest::class);
     }
 
-
+    /**
+     * Get the payment associated with the user.
+     */
     public function payment()
     {
         return $this->belongsTo(Payment::class, 'payment_id');
     }
-
-
-
-
 }

@@ -194,17 +194,14 @@ class ProfileController extends Controller
 
     public function StudentReturnBookList()
     {
-        // Fetch borrow requests for the current student with the status "approved"
+        // Fetch borrow requests for the current student with statuses "approved" or "returned"
         $borrowRequests = BorrowApproval::where('user_id', auth()->user()->id)
-                                        ->where('status', 'approved')
+                                        ->whereIn('status', ['approved', 'returned'])
                                         ->get();
     
         return view('layouts.book.student_return_list', compact('borrowRequests'));
     }
     
-
-
-
     
 
     public function ReturnBook(Request $request, BorrowApproval $borrowApproval)
