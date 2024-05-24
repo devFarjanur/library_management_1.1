@@ -22,8 +22,12 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>ID</th>
                                     <th>Email</th>
-                                    <th>Phone Number</th>
+                                    <th>Phone</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Address</th>
                                     <th>Payment Method</th>
                                     <th>TrxID</th>
                                     <th>Actions</th>
@@ -34,8 +38,12 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $request->name }}</td>
+                                        <td>{{ $request->student_id }}</td>
                                         <td>{{ $request->email }}</td>
                                         <td>{{ $request->phone }}</td>
+                                        <td>{{ $request->age }}</td>
+                                        <td>{{ $request->gender }}</td>
+                                        <td>{{ $request->address }}</td>
                                         <td>{{ $request->payment->payment_method_name ?? 'N/A' }}</td>
                                         <td>{{ $request->TrxID }}</td>
                                         <td>

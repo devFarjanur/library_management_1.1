@@ -5,150 +5,164 @@
 
 <div class="page-content">
 
-<div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-  <div>
-    <h4 class="mb-3 mb-md-0">Welcome to Dashboard</h4>
-  </div>
-  <div class="d-flex align-items-center flex-wrap text-nowrap">
-    <div class="input-group flatpickr wd-200 me-2 mb-2 mb-md-0" id="dashboardDate">
-      <span class="input-group-text input-group-addon bg-transparent border-primary" data-toggle><i data-feather="calendar" class="text-primary"></i></span>
-      <input type="text" class="form-control bg-transparent border-primary" placeholder="Select date" data-input>
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h4 class="mb-3 mb-md-0">Welcome to Dashboard</h4>
     </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12 col-xl-12 stretch-card">
-    <div class="row flex-grow-1">
-      <div class="col-md-3 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-2">Total Books</h6>
-            </div>
-            <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{ $totalbooks }}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-2">Total Students</h6>
-            </div>
-            <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{ $totalstudents }}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-2">Total Books Borrowed</h6>
-            </div>
-            <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{ $totalborrowed }}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-2">Total Books Returned</h6>
-            </div>
-            <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{ $totalreturned }}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="d-flex align-items-center flex-wrap text-nowrap">
+      <div class="input-group flatpickr wd-200 me-2 mb-2 mb-md-0" id="dashboardDate">
+        <span class="input-group-text input-group-addon bg-transparent border-primary" data-toggle><i
+            data-feather="calendar" class="text-primary"></i></span>
+        <input type="text" class="form-control bg-transparent border-primary" placeholder="Select date" data-input>
       </div>
     </div>
   </div>
-</div>
 
-
-
-<div class="mt-3 d-flex justify-content-between align-items-center flex-wrap grid-margin">
-  <div>
-    <h4 class="mb-3 mb-md-0">Payment Method</h4>
+  <div class="row">
+    <div class="col-12 col-xl-12 stretch-card">
+      <div class="row flex-grow-1">
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-baseline">
+                <h6 class="card-title mb-2">Total Books</h6>
+              </div>
+              <div class="row">
+                <div class="col-6 col-md-12 col-xl-5">
+                  <h3 class="mb-2">{{ $totalbooks }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-baseline">
+                <h6 class="card-title mb-2">Total Students</h6>
+              </div>
+              <div class="row">
+                <div class="col-6 col-md-12 col-xl-5">
+                  <h3 class="mb-2">{{ $totalstudents }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-baseline">
+                <h6 class="card-title mb-2">Total Books Borrowed</h6>
+              </div>
+              <div class="row">
+                <div class="col-6 col-md-12 col-xl-5">
+                  <h3 class="mb-2">{{ $totalborrowed }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-baseline">
+                <h6 class="card-title mb-2">Total Books Returned</h6>
+              </div>
+              <div class="row">
+                <div class="col-6 col-md-12 col-xl-5">
+                  <h3 class="mb-2">{{ $totalreturned }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class=" mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
-    <a href="{{ route('admin.add.payment') }}" class="btn btn-primary">Add Payment Method</a>
+
+
+
+  <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h4 class="mb-3 mb-md-0">Payment Method</h4>
+    </div>
+    <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
+      <a href="{{ route('admin.add.payment') }}" class="btn btn-primary">Add Payment Method</a>
+    </div>
   </div>
 
-</div>
-
-<div class="row">
-  @foreach($payments as $payment)
-  <div class="col-md-3 grid-margin stretch-card">
+  <div class="row">
+    @foreach($payments as $payment)
+    <div class="col-md-3 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <div class="row">
-
-            <h4 class="mt-3 mb-3 text-center">{{ $payment->payment_method_name }}</h4>
-
+      <div class="row">
+        <h4 class="mt-3 mb-3 text-center">{{ $payment->payment_method_name }}</h4>
+        <div class="d-flex justify-content-center">
+        <form action="{{ route('admin.delete.payment', $payment->id) }}" method="POST">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
         </div>
       </div>
+      </div>
     </div>
-  </div>
+    </div>
   @endforeach
-</div>
+  </div>
 
 
 
 
-<div class="row">
-<div class="col-12 stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-baseline mb-2">
-          <h6 class="card-title mb-3 mb-0">Students</h6>
+
+  <div class="row">
+    <div class="col-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-baseline mb-2">
+            <h6 class="card-title mb-3 mb-0">Students</h6>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>ID</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Address</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($students as $student)
+          <tr>
+          <td>{{ $loop->iteration }}</td>
+          <td>{{ $student->name }}</td>
+          <td>{{ $student->student_id }}</td>
+          <td>{{ $student->email }}</td>
+          <td>{{ $student->phone }}</td>
+          <td>{{ $student->age }}</td>
+          <td>{{ $student->gender }}</td>
+          <td>{{ $student->address }}</td>
+          <td>{{ $student->status }}</td> <!-- Assuming this is how you access the role -->
+          </tr>
+        @endforeach
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-hover mb-0">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-            @foreach ($students as $student)
-              <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $student->name }}</td>
-                <td>{{ $student->email }}</td>
-                <td>{{ $student->phone }}</td> <!-- Assuming this is how you access the course name -->
-                <td>{{ $student->status }}</td> <!-- Assuming this is how you access the role -->
-              </tr>
-            @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div> 
+      </div>
     </div>
   </div>
-</div>
 
 
-<!-- <div class="row">
+  <!-- <div class="row">
   <div class="col-lg-5 col-xl-4 grid-margin grid-margin-xl-0 stretch-card">
     <div class="card">
       <div class="card-body">

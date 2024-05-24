@@ -11,6 +11,7 @@
                         <div class="flex items-center">
                             <input type="text" name="title" placeholder="Search by Title" class="mr-2 px-3 py-2 border border-gray-300 focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 rounded-md">
                             <input type="text" name="author" placeholder="Search by Author" class="mr-2 px-3 py-2 border border-gray-300 focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 rounded-md">
+                            <input type="text" name="category" placeholder="Search by Category" class="mr-2 px-3 py-2 border border-gray-300 focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 rounded-md">
                             <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Search</button>
                         </div>
                     </form>
@@ -24,6 +25,7 @@
                                     <th>Title</th>
                                     <th>Author</th>
                                     <th>Edition</th>
+                                    <th>Category</th>
                                     <th>Quantity</th>
                                     <th>Action</th>
                                 </tr>
@@ -35,6 +37,7 @@
                                     <td>{{ $book->title }}</td>
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->edition }}</td>
+                                    <td>{{ $book->category->category_name }}</td>
                                     <td>{{ $book->quantity }}</td>
                                     <td>
                                         <form action="{{ route('student.borrow.book', ['book' => $book]) }}" method="POST">

@@ -17,6 +17,7 @@
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Total Books Rejected</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Total Books Returned</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Total Fine</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Fine Status</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,11 @@
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ $data['total_books_rejected'] }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ $data['total_books_returned'] }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ $data['total_fine'] }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">                                        @if ($data['fine_paid'] > 0)
+                                            {{ $data['fine_paid'] }} Taka Paid
+                                        @else
+                                            No Fine
+                                        @endif</td>
                 </tr>
             @endforeach
         </tbody>

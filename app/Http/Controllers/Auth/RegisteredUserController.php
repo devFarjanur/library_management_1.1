@@ -34,8 +34,12 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'student_id' => ['required', 'string', 'max:255'], // Add validation for id
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'phone' => ['nullable', 'numeric', 'digits:11'],
+            'age' => ['required', 'integer', 'min:1'], // Add validation for age
+            'gender' => ['required', 'string', 'max:255'], // Add validation for gender
+            'address' => ['required', 'string', 'max:255'], // Add validation for address
             'payment_method' => ['required', 'exists:payments,id'],
             'trx_id' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -43,8 +47,12 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'student_id' => $request->student_id, // Save the id
             'email' => $request->email,
             'phone' => $request->phone,
+            'age' => $request->age, // Save the age
+            'gender' => $request->gender, // Save the gender
+            'address' => $request->address, // Save the address
             'payment_id' => $request->payment_method,
             'TrxID' => $request->trx_id,
             'password' => Hash::make($request->password),

@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/student/return-book-list', [ProfileController::class, 'StudentReturnBookList'])->name('student.return.book.list');
     Route::post('/student/return-book/{borrowApproval}', [ProfileController::class, 'ReturnBook'])->name('student.return.book');
 
+    Route::post('/borrow-approval/{id}/pay-fine', [ProfileController::class, 'payFine'])
+    ->name('borrow-approval.pay-fine');
+
     Route::get('/student/feedback/create', [ProfileController::class, 'create'])->name('feedback.create');
     Route::post('/student/feedback/store', [ProfileController::class, 'store'])->name('feedback.store');
 
@@ -67,6 +70,7 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
+    Route::delete('/admin/dashboard/{id}', [AdminController::class, 'destroy'])->name('admin.delete.payment');
     Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
     Route::get('/admin/Profile', [AdminController::class, 'AdminProfile'])->name('admin.profile');
     Route::post('/admin/Profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');

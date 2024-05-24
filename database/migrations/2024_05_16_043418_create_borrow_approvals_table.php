@@ -18,6 +18,9 @@ class CreateBorrowApprovalsTable extends Migration
             $table->timestamp('return_due_date')->nullable();
             $table->timestamp('returned_at')->nullable();
             $table->integer('fine')->default(0);
+            $table->enum('fine_status', ['not paid', 'paid'])->default('not paid');
+            $table->foreignId('payment_method_id')->nullable()->constrained('payments')->onDelete('cascade');
+            $table->string('TrxID')->nullable();
             $table->timestamps();
         });
     }

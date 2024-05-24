@@ -40,6 +40,24 @@ class AdminController extends Controller
     } // end method
 
 
+    /**
+     * Remove the specified payment method from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id)
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
+
+        return redirect()->route('admin.dashboard')->with([
+            'message' => 'Payment Method deleted successfully.',
+            'alert-type' => 'success'
+        ]);
+    }
+
+
     public function AdminAddPayment()
     {
         return view('admin.admin_add_payment');
@@ -278,28 +296,28 @@ class AdminController extends Controller
         $title = $request->input('title');
         $author = $request->input('author');
         $category = $request->input('category');
-    
+
         // Retrieve all books initially
         $query = Book::query();
-    
+
         // Apply search criteria if provided
         if ($title) {
             $query->where('title', 'like', '%' . $title . '%');
         }
-    
+
         if ($author) {
             $query->where('author', 'like', '%' . $author . '%');
         }
-    
+
         if ($category) {
             $query->whereHas('category', function ($q) use ($category) {
                 $q->where('category_name', 'like', '%' . $category . '%');
             });
         }
-    
+
         // Perform search based on criteria
         $searchResults = $query->with('category')->get();
-    
+
         return view('admin.book.admin_search_book', compact('searchResults'));
     }
 
@@ -472,7 +490,7 @@ class AdminController extends Controller
     public function AdminReport()
     {
         $students = User::where('role', 'student')->get();
-
+    
         $reportData = $students->map(function ($student) {
             $totalBooksBorrowed = $student->borrowRequests()->count();
             $totalBooksReturned = $student->borrowRequests()->whereHas('approvals', function ($query) {
@@ -482,10 +500,18 @@ class AdminController extends Controller
             $totalFine = $student->borrowRequests()->with('approvals')->get()->sum(function ($borrowRequest) {
                 return $borrowRequest->approvals->sum('fine');
             });
+    
+            // Calculate the total fine paid
+            $finePaid = $student->borrowRequests()->whereHas('approvals', function ($query) {
+                $query->where('fine_status', 'paid');
+            })->with('approvals')->get()->sum(function ($borrowRequest) {
+                return $borrowRequest->approvals->where('fine_status', 'paid')->sum('fine');
+            });
+    
             $totalBooksPending = $student->borrowRequests()->where('status', 'pending')->count();
             $totalBooksApproved = $student->borrowRequests()->where('status', 'approved')->count();
             $totalBooksRejected = $student->borrowRequests()->where('status', 'rejected')->count();
-
+    
             return [
                 'student_name' => $student->name,
                 'student_email' => $student->email,
@@ -496,11 +522,14 @@ class AdminController extends Controller
                 'total_books_returned' => $totalBooksReturned,
                 'total_books_not_returned' => $totalBooksNotReturned,
                 'total_fine' => $totalFine,
+                'fine_paid' => $finePaid,
             ];
         });
-
+    
         return view('admin.admin_report', compact('reportData'));
     }
+    
+
 
 
 
@@ -510,7 +539,7 @@ class AdminController extends Controller
     {
         // Fetch the report data similarly to AdminReport method
         $students = User::where('role', 'student')->get();
-
+    
         $reportData = $students->map(function ($student) {
             $totalBooksBorrowed = $student->borrowRequests()->count();
             $totalBooksReturned = $student->borrowRequests()->whereHas('approvals', function ($query) {
@@ -520,10 +549,18 @@ class AdminController extends Controller
             $totalFine = $student->borrowRequests()->with('approvals')->get()->sum(function ($borrowRequest) {
                 return $borrowRequest->approvals->sum('fine');
             });
+    
+            // Calculate the total fine paid
+            $finePaid = $student->borrowRequests()->whereHas('approvals', function ($query) {
+                $query->where('fine_status', 'paid');
+            })->with('approvals')->get()->sum(function ($borrowRequest) {
+                return $borrowRequest->approvals->where('fine_status', 'paid')->sum('fine');
+            });
+    
             $totalBooksPending = $student->borrowRequests()->where('status', 'pending')->count();
             $totalBooksApproved = $student->borrowRequests()->where('status', 'approved')->count();
             $totalBooksRejected = $student->borrowRequests()->where('status', 'rejected')->count();
-
+    
             return [
                 'student_name' => $student->name,
                 'student_email' => $student->email,
@@ -534,6 +571,7 @@ class AdminController extends Controller
                 'total_books_returned' => $totalBooksReturned,
                 'total_books_not_returned' => $totalBooksNotReturned,
                 'total_fine' => $totalFine,
+                'fine_paid' => $finePaid,
             ];
         });
 

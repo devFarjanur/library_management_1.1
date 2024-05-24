@@ -16,13 +16,16 @@ return new class extends Migration
             $table->foreignId('payment_id')->nullable()->constrained('payments')->onDelete('cascade');
             $table->string('name');
             $table->string('username')->nullable();
+            $table->string('student_id')->nullable();
             $table->string('email')->unique();
+            $table->unsignedBigInteger('age')->nullable();
+            $table->string('gender')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('TrxID')->nullable();
             $table->string('password');
             $table->string('photo')->nullable();
             $table->unsignedBigInteger('phone')->nullable();
-            $table->text('address')->nullable();
+            $table->string('address')->nullable();
             $table->enum('role', ['admin', 'student', 'user'])->default('student');
             $table->boolean('approved')->default(false);
             $table->enum('status', ['active', 'inactive'])->default('active');

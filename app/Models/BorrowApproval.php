@@ -10,7 +10,7 @@ class BorrowApproval extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['borrow_request_id', 'admin_id', 'user_id', 'book_id', 'status', 'return_due_date', 'returned_at', 'fine'];
+    protected $fillable = ['borrow_request_id', 'admin_id', 'user_id', 'book_id', 'status', 'return_due_date', 'returned_at', 'fine', 'payment_method_id', 'TrxID', 'fine_status'];
 
     protected $dates = ['return_due_date', 'returned_at'];
 
