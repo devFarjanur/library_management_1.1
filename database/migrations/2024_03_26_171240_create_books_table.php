@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->string('title');
             $table->string('author');
             $table->string('edition');
+            $table->string('isbn');
             $table->string('quantity');
             $table->string('description');
+            $table->string('self_number');
             $table->timestamps();
         });
     }

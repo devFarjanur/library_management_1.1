@@ -33,12 +33,30 @@
                             <input type="text" class="form-control" name="edition" id="edition" placeholder="Edition" value="{{ $book->edition }}">
                         </div>
                         <div class="mb-3">
+                            <label class="form-label">Book ISBN Number</label>
+                            <input type="text" class="form-control" name="isbn" id="isbn" placeholder="ISBN Number" value="{{ $book->isbn }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="category" class="form-label">Book Category</label>
+                            <select class="form-control" id="category" name="category_id">
+                                <option value="" selected disabled>-- Select Book Category --</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $book->category_id == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Book Quantity</label>
                             <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value="{{ $book->quantity }}">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Book Description</label>
                             <textarea id="description" name="description" class="form-control" rows="8" placeholder="Enter a detailed description of book...">{{ $book->description }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Self Number</label>
+                            <input type="text" class="form-control" name="self_number" id="self_number"
+                                placeholder="Self Number" value="{{ $book->self_number }}">
                         </div>
 
                         <button type="submit" class="btn btn-primary me-2">Update</button>

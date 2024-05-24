@@ -47,7 +47,7 @@ class User extends Authenticatable
 
         static::saving(function ($model) {
             $validator = Validator::make($model->toArray(), [
-                'phone' => 'nullable|numeric|digits:11',
+                'phone' => 'nullable|numeric|digits_between:1,11',
             ]);
 
             if ($validator->fails()) {
@@ -78,5 +78,15 @@ class User extends Authenticatable
     public function payment()
     {
         return $this->belongsTo(Payment::class, 'payment_id');
+    }
+
+    /**
+     * Accessor to ensure phone number is always 11 digits long.
+     *
+     * @return string
+     */
+    public function getPhoneAttribute($value)
+    {
+        return str_pad($value, 11, '0', STR_PAD_LEFT);
     }
 }

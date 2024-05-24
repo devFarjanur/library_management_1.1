@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('TrxID')->nullable();
             $table->string('password');
             $table->string('photo')->nullable();
-            $table->unsignedBigInteger('phone')->nullable(); 
+            $table->unsignedBigInteger('phone')->nullable();
             $table->text('address')->nullable();
             $table->enum('role', ['admin', 'student', 'user'])->default('student');
             $table->boolean('approved')->default(false);

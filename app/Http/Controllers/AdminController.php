@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\BorrowApproval;
 use App\Models\BorrowRequest;
+use App\Models\Category;
 use App\Models\Feed;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Log;
+
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
@@ -18,33 +22,36 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Book;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class AdminController extends Controller
 {
-    public function AdminDashboard(){
+    public function AdminDashboard()
+    {
         $totalbooks = Book::count();
-        $totalstudents = User::where('role', 'student')->where('approved', true)->count(); 
+        $totalstudents = User::where('role', 'student')->where('approved', true)->count();
         $totalborrowed = BorrowApproval::where('status', 'approved')->count();
         $totalreturned = BorrowApproval::where('status', 'returned')->count();
         $students = User::where('role', 'student')->where('approved', true)->get();
         $payments = Payment::all();
-    
+
         return view('admin.index', compact('totalbooks', 'totalstudents', 'students', 'totalborrowed', 'totalreturned', 'payments'));
     } // end method
 
 
-    Public function AdminAddPayment()
+    public function AdminAddPayment()
     {
         return view('admin.admin_add_payment');
     }
 
 
-    Public function AdminStorePayment(Request $request)
+    public function AdminStorePayment(Request $request)
     {
         $validatedData = $request->validate([
             'paymentmethod' => 'required|string|max:255', // Update the field name
         ]);
-    
+
         $payment = new Payment();
         $payment->payment_method_name = $request->paymentmethod; // Update the field name
         $payment->save();
@@ -65,50 +72,62 @@ class AdminController extends Controller
     {
         // Fetch pending course teacher requests where approved is false
         $pendingStudentRequests = User::where('role', 'student')->where('approved', false)->get();
-        
+
         return view('admin.Membership_student', compact('pendingStudentRequests'));
     }
 
 
     public function approveStudent($id)
     {
+        Log::info("approveStudent method called with ID: $id");
+
         $student = User::find($id);
+
         if ($student) {
+            Log::info("Student found: ", ['id' => $student->id, 'name' => $student->name]);
+
             $student->approved = true;
             $student->save();
+
+            Log::info("Student approved successfully: ", ['id' => $student->id]);
+        } else {
+            Log::warning("Student not found with ID: $id");
         }
 
-
         // Redirect back with a success message
-        $notification = array(
+        $notification = [
             'message' => 'Student approved successfully.',
             'alert-type' => 'success'
-        );
-            
+        ];
+
         return redirect()->back()->with($notification);
-
-
     }
 
 
     public function rejectStudent($id)
     {
+        log::info("rejectStudent method called with ID: $id");
+
         $user = User::findOrFail($id);
-        $user->delete();
 
+        if ($user) {
+            Log::info("Student found for rejection: ", ['id' => $user->id, 'name' => $user->name]);
 
-                // Redirect back with a success message
-        $notification = array(
+            $user->delete();
+
+            Log::info("Student rejected and removed successfully: ", ['id' => $user->id]);
+        } else {
+            Log::warning("Student not found with ID: $id for rejection");
+        }
+
+        // Redirect back with a success message
+        $notification = [
             'message' => 'Student rejected and removed successfully.',
             'alert-type' => 'success'
-        );
-                    
-
+        ];
 
         return redirect()->back()->with($notification);
     }
-
-    
 
 
 
@@ -124,28 +143,31 @@ class AdminController extends Controller
         return redirect('/');
     }  // end method
 
-    public function AdminLogin(){
+    public function AdminLogin()
+    {
         return view('admin.admin_login');
     }  // end method
 
 
-    public function AdminProfile(){
+    public function AdminProfile()
+    {
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        return view('admin.admin_profile_view',compact('profileData'));
+        return view('admin.admin_profile_view', compact('profileData'));
     }  // end method
 
-    public function AdminProfileStore(Request $request){
+    public function AdminProfileStore(Request $request)
+    {
         $id = Auth::user()->id;
         $data = User::find($id);
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
-        
+
         if ($request->file('photo')) {
             $file = $request->file('photo');
-            @unlink(public_path('upload/admin_images/'.$data->photo));
-            $filename = date('YmdHi').$file->getClientOriginalName();
+            @unlink(public_path('upload/admin_images/' . $data->photo));
+            $filename = date('YmdHi') . $file->getClientOriginalName();
             $file->move(public_path('upload/admin_images'), $filename);
             $data->photo = $filename;
         }
@@ -163,76 +185,175 @@ class AdminController extends Controller
 
 
 
-    public function AdminChangePassword(){
+    public function AdminChangePassword()
+    {
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        return view('admin.admin_change_password',compact('profileData'));
+        return view('admin.admin_change_password', compact('profileData'));
     } //  end method
 
 
-
-
-    // admin product category   
-
-
-    // public function AdminProductCategories()
-    // {
-    //     return view('admin.category.admin_category');
-    // }
+    public function AdminCategories()
+    {
+        $categories = Category::all();
+        return view('admin.book.admin_category', compact('categories'));
+    }
 
 
 
-    // public function AdminCreateProductCategories()
-    // {
-    //     return view('admin.category.admin_add_category');
-    // }
+    public function AdminCreateCategories()
+    {
+        return view('admin.book.admin_add_category');
+    }
+
+
+    public function AdminCategoriesStore(Request $request)
+    {
+        $validatedInput = $request->validate([
+            'category_name' => 'required|string|max:255',
+        ]);
 
 
 
 
 
+        Category::create($validatedInput);
 
+        $notification = array(
+            'message' => 'Book Category added successfully.',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('admin.categories')->with($notification);
+
+    }
+
+
+
+
+    public function AdminEditCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('admin.book.admin_edit_category', compact('category'));
+    }
+
+    public function AdminUpdateCategory(Request $request, $id)
+    {
+        $validatedInput = $request->validate([
+            'category_name' => 'required|string|max:255',
+        ]);
+
+
+
+
+        $category = Category::findOrFail($id);
+        $category->update($validatedInput);
+
+        return redirect()->route('admin.categories')->with([
+            'message' => 'Book Category updated successfully.',
+            'alert-type' => 'success'
+        ]);
+    }
+
+
+
+    public function AdminDeleteCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return redirect()->route('admin.categories')->with([
+            'message' => 'Book Category deleted successfully.',
+            'alert-type' => 'success'
+        ]);
+
+    }
+
+
+
+
+    public function AdminSearchBook(Request $request)
+    {
+        // Retrieve search criteria from the request
+        $title = $request->input('title');
+        $author = $request->input('author');
+        $category = $request->input('category');
     
+        // Retrieve all books initially
+        $query = Book::query();
+    
+        // Apply search criteria if provided
+        if ($title) {
+            $query->where('title', 'like', '%' . $title . '%');
+        }
+    
+        if ($author) {
+            $query->where('author', 'like', '%' . $author . '%');
+        }
+    
+        if ($category) {
+            $query->whereHas('category', function ($q) use ($category) {
+                $q->where('category_name', 'like', '%' . $category . '%');
+            });
+        }
+    
+        // Perform search based on criteria
+        $searchResults = $query->with('category')->get();
+    
+        return view('admin.book.admin_search_book', compact('searchResults'));
+    }
+
+
+
+
+
+
+
     // admin book
 
-    public function AdminBook(){
+    public function AdminBook()
+    {
+        $categories = Category::all();
         $books = Book::all();
-        return view('admin.book/admin_book',compact('books'));
+        return view('admin.book/admin_book', compact('books', 'categories'));
     } // end method
 
 
-    public function AdminAddBook(){
-        return view('admin.book/admin_add_book');
+    public function AdminAddBook()
+    {
+        $categories = Category::all();
+        return view('admin.book/admin_add_book', compact('categories'));
     } // end method
 
     public function adminBookStore(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'string',
-            'author' => 'string',
-            'edition' => 'string',
-            'quantity' => 'integer|min:0',
-            'description' => 'string',
+        $validatedInput = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'edition' => 'required|string|max:255',
+            'isbn' => 'required|string|max:255',
+            'quantity' => 'required|string',
+            'description' => 'required|string',
+            'self_number' => 'required|string',
         ]);
-        
-        Book::create($validatedData);
-    
+
+
+        Book::create($validatedInput);
+
         return redirect()->route('admin.book')->with([
             'message' => 'Book Added Successfully',
             'alert-type' => 'success'
         ]);
     }
 
-    // public function AdminProductSingleview($id){
-    //     $book = Book::findOrFail($id);
-    //     return view('admin.product/admin_product_single', compact('book'));
-    // }
 
 
     public function editBook($id)
     {
+        $categories = Category::all();
         $book = Book::findOrFail($id);
-        return view('admin.book.admin_edit_book', compact('book'));
+        return view('admin.book.admin_edit_book', compact('book', 'categories'));
     }
 
     public function updateBook(Request $request, $id)
@@ -266,39 +387,9 @@ class AdminController extends Controller
     public function AdminEditBook($id)
     {
         $book = Book::findOrFail($id); // Find the product by ID
-    
+
         return view('admin.book.admin_edit_book', compact('book'));
     }
-
-
-    // public function AdminUpdateBook(Request $request, $id){
-    //     $book = Book::find($id);
-    //     $book->name = $request->input('title');
-    //     $book->price = $request->input('price');
-    //     $book->stock = $request->input('stock');
-    //     $book->description = $request->input('description');
-
-    //     if ($request->file('photo')) {
-    //         $file = $request->file('photo');
-    //         @unlink(public_path('upload/admin_images/'.$book->photo));
-    //         $filename = date('YmdHi').$file->getClientOriginalName();
-    //         $file->move(public_path('upload/admin_images'), $filename);
-    //         $book->photo = $filename;
-    //     }
-
-
-    
-    //     $book->save();
-    
-    //     $notification = [
-    //         'message' => 'Book Updated Successfully',
-    //         'alter-type' => 'success'
-    //     ];
-    
-    //     return redirect()->back()->with($notification);
-    // }
-
-
 
 
 
@@ -318,7 +409,7 @@ class AdminController extends Controller
         if (auth()->user()->role !== 'admin') {
             return abort(403, 'Unauthorized');
         }
-        
+
         // Find the book related to the borrow request
         $book = $borrowRequest->book;
 
@@ -339,7 +430,7 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Borrow request approved successfully. Book quantity decremented.');
     }
-    
+
 
 
     public function AdminRejectBorrowRequest(Request $request, BorrowRequest $borrowRequest)
@@ -350,7 +441,7 @@ class AdminController extends Controller
         if (auth()->user()->role !== 'admin') {
             return abort(403, 'Unauthorized');
         }
-    
+
         // Create a new entry in borrow_approvals table
         BorrowApproval::create([
             'borrow_request_id' => $borrowRequest->id,
@@ -359,10 +450,10 @@ class AdminController extends Controller
             'book_id' => $borrowRequest->book_id,
             'status' => 'rejected'
         ]);
-        
+
         // Update the status of the borrow request to rejected
         $borrowRequest->update(['status' => 'rejected']);
-    
+
         return redirect()->back()->with('success', 'Borrow request rejected successfully.');
     }
 
@@ -381,34 +472,77 @@ class AdminController extends Controller
     public function AdminReport()
     {
         $students = User::where('role', 'student')->get();
-    
-        $reportData = $students->map(function($student) {
+
+        $reportData = $students->map(function ($student) {
             $totalBooksBorrowed = $student->borrowRequests()->count();
             $totalBooksReturned = $student->borrowRequests()->whereHas('approvals', function ($query) {
                 $query->where('status', 'returned');
             })->count();
             $totalBooksNotReturned = $totalBooksBorrowed - $totalBooksReturned;
-            $totalFine = $student->borrowRequests()->with('approvals')->get()->sum(function($borrowRequest) {
+            $totalFine = $student->borrowRequests()->with('approvals')->get()->sum(function ($borrowRequest) {
                 return $borrowRequest->approvals->sum('fine');
             });
             $totalBooksPending = $student->borrowRequests()->where('status', 'pending')->count();
+            $totalBooksApproved = $student->borrowRequests()->where('status', 'approved')->count();
             $totalBooksRejected = $student->borrowRequests()->where('status', 'rejected')->count();
-    
+
             return [
                 'student_name' => $student->name,
                 'student_email' => $student->email,
                 'total_books_borrowed' => $totalBooksBorrowed,
                 'total_books_pending' => $totalBooksPending,
+                'total_books_approved' => $totalBooksApproved,
                 'total_books_rejected' => $totalBooksRejected,
                 'total_books_returned' => $totalBooksReturned,
                 'total_books_not_returned' => $totalBooksNotReturned,
                 'total_fine' => $totalFine,
             ];
         });
-    
+
         return view('admin.admin_report', compact('reportData'));
     }
-    
+
+
+
+
+
+    public function GeneratePdf()
+    {
+        // Fetch the report data similarly to AdminReport method
+        $students = User::where('role', 'student')->get();
+
+        $reportData = $students->map(function ($student) {
+            $totalBooksBorrowed = $student->borrowRequests()->count();
+            $totalBooksReturned = $student->borrowRequests()->whereHas('approvals', function ($query) {
+                $query->where('status', 'returned');
+            })->count();
+            $totalBooksNotReturned = $totalBooksBorrowed - $totalBooksReturned;
+            $totalFine = $student->borrowRequests()->with('approvals')->get()->sum(function ($borrowRequest) {
+                return $borrowRequest->approvals->sum('fine');
+            });
+            $totalBooksPending = $student->borrowRequests()->where('status', 'pending')->count();
+            $totalBooksApproved = $student->borrowRequests()->where('status', 'approved')->count();
+            $totalBooksRejected = $student->borrowRequests()->where('status', 'rejected')->count();
+
+            return [
+                'student_name' => $student->name,
+                'student_email' => $student->email,
+                'total_books_borrowed' => $totalBooksBorrowed,
+                'total_books_pending' => $totalBooksPending,
+                'total_books_approved' => $totalBooksApproved,
+                'total_books_rejected' => $totalBooksRejected,
+                'total_books_returned' => $totalBooksReturned,
+                'total_books_not_returned' => $totalBooksNotReturned,
+                'total_fine' => $totalFine,
+            ];
+        });
+
+        // Load the view and pass the data to it
+        $pdf = Pdf::loadView('admin.admin_report_pdf', compact('reportData'));
+
+        // Return the generated PDF
+        return $pdf->download('admin_report.pdf');
+    }
 
     public function index()
     {

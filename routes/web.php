@@ -83,6 +83,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // admin boook
 
+    Route::get('/admin/categories', [AdminController::class, 'AdminCategories'])->name('admin.categories');
+    Route::get('/admin/create-categories', [AdminController::class, 'AdminCreateCategories'])->name('admin.create.categories');
+    Route::post('/admin/categories-store', [AdminController::class, 'AdminCategoriesStore'])->name('admin.categories.store');
+
+
+    Route::get('/admin/categories/edit/{id}', [AdminController::class, 'AdminEditCategory'])->name('admin.edit.category');
+    Route::put('/admin/categories/update/{id}', [AdminController::class, 'AdminUpdateCategory'])->name('admin.update.category');
+    Route::delete('/admin/categories/delete/{id}', [AdminController::class, 'AdminDeleteCategory'])->name('admin.delete.category');
+
+    Route::get('/admin/search-book', [AdminController::class, 'AdminSearchBook'])->name('admin.search.book');
+
     Route::get('/admin/book', [AdminController::class, 'AdminBook'])->name('admin.book');
     Route::get('/admin/add/book', [AdminController::class, 'AdminAddBook'])->name('admin.add.book');
     Route::post('/admin/book/store', [AdminController::class, 'AdminBookStore'])->name('admin.book.store');
@@ -105,6 +116,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/admin/report', [AdminController::class, 'AdminReport'])->name('admin.report');
 
+    Route::get('/admin/report/pdf', [AdminController::class, 'GeneratePdf'])->name('admin.report.pdf');
+
+
+
     Route::get('/admin/feedback', [AdminController::class, 'index'])->name('feedback.index');
 
 
@@ -112,7 +127,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });  // End Admin group middleware
 
 
-
-Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
 
 
